@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import me.leojlindo.flicks.models.Movie;
+import me.leojlindo.flicks.models.Config;
 
 public class MovieListActivity extends AppCompatActivity {
 
@@ -118,6 +119,8 @@ public class MovieListActivity extends AppCompatActivity {
                 try {
                     config = new Config(response);
                     Log.i(TAG, String.format("Loaded configuration with imageBaseURL %s and poster size %s", config.getImageBaseUrl(), config.getPosterSize()));
+                    // pass config to adapter
+                    adapter.setConfig(config);
                     // get now playing movies list
                     getNowPlaying();
                 } catch (JSONException e) {
