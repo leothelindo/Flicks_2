@@ -33,12 +33,6 @@ public class MovieListActivity extends AppCompatActivity {
     // instance fields
     AsyncHttpClient client;
 
-    // base url for loading images
-    String imageBaseUrl;
-
-    // poster size to use when fetching images
-    String posterSize;
-
     // the list of currently playing movies
     ArrayList<Movie> movies;
 
@@ -46,6 +40,9 @@ public class MovieListActivity extends AppCompatActivity {
     RecyclerView rvMovies;
     // the adapter wired to the recycler view
     MovieAdapter adapter;
+
+    // image config
+    Config config;
 
 
     @Override
@@ -89,6 +86,8 @@ public class MovieListActivity extends AppCompatActivity {
                     for (int i = 0; i < results.length(); i++){
                         Movie movie = new Movie(results.getJSONObject(i));
                         movies.add(movie);
+                        // notify adapter that a row was added
+                        adapter.notifyItemInserted(movies.size()-1);
                     }
                     Log.i(TAG, String.format("Loaded %s movies", results.length()));
                 } catch (JSONException e) {
@@ -117,14 +116,8 @@ public class MovieListActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
                 try {
-                    JSONObject images = response.getJSONObject("images");
-                    // get the image base url
-                    imageBaseUrl = images.getString("secure_base_url");
-                    // get poster size
-                    JSONArray posterSizeOptions = images.getJSONArray("poster_sizes");
-                    // use the option at index 3 or w342 as a fallback
-                    posterSize = posterSizeOptions.optString(3, "w342");
-                    Log.i(TAG, String.format("Loaded configuration with imageBaseURL %s and poster size %s", imageBaseUrl, posterSize));
+                    config = new Config(response);
+                    Log.i(TAG, String.format("Loaded configuration with imageBaseURL %s and poster size %s", config.getImageBaseUrl(), config.getPosterSize()));
                     // get now playing movies list
                     getNowPlaying();
                 } catch (JSONException e) {
