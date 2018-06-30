@@ -32,6 +32,8 @@ Here's a walkthrough of implemented user stories:
 
 ! [Walkthrough]
 (walkthrough_1.gif)
+
+! [Walkthrough part 2]
 (walkthrough_2.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
